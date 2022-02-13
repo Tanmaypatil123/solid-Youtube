@@ -1,6 +1,5 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
 contract VideoContract {
     struct Video {
         string ipfsAddress;
@@ -11,8 +10,10 @@ contract VideoContract {
         uint256 tipamount;
         address payable owner;
     }
+
     mapping(uint256 => Video) public videos;
     uint256 public VideoCount = 0;
+
     event VideoCreated(
         string ipfsAddress,
         string title,
@@ -30,6 +31,15 @@ contract VideoContract {
         uint256 dislilkes,
         uint256 tipamount,
         address payable owner
+    );
+
+    event VideoLiked(
+        string ipfsAddress,
+        uint id
+    );
+    event VideoDisliked(
+        string ipfsAddress,
+        uint id
     );
 
     function UploadVideo(
@@ -64,6 +74,23 @@ contract VideoContract {
         );
     }
 
+    function getVideoDetails(uint256 _id) public view returns (
+        string memory, string memory, string memory, uint, uint, uint, address payable
+    ) {
+        require(_id > 0 && _id <= VideoCount);
+        Video memory _video = videos[_id];
+        return (
+        _video.ipfsAddress,
+        _video.title,
+        _video.description,
+        _video.likes,
+        _video.dislilkes,
+        _video.tipamount,
+        _video.owner
+        );
+
+    }
+
     function tipVideoOwner(uint256 _id) public payable {
         require(_id > 0 && _id <= VideoCount);
         Video memory _video = videos[_id];
@@ -79,6 +106,28 @@ contract VideoContract {
             _video.dislilkes,
             _video.tipamount,
             _video.owner
+        );
+    }
+
+    function likesTheVideo(uint256 _id) public {
+        require(_id > 0 && _id <= VideoCount);
+        Video memory _video = videos[_id];
+        _video.likes = _video.likes + 1;
+        videos[_id] = _video;
+        emit VideoLiked(
+            _video.ipfsAddress,
+            _id
+        );
+    }
+
+    function DislikesTheVideo(uint256 _id) public {
+        require(_id > 0 && _id <= VideoCount);
+        Video memory _video = videos[_id];
+        _video.dislilkes = _video.dislilkes + 1;
+        videos[_id] = _video;
+        emit VideoDisliked(
+            _video.ipfsAddress,
+            _id
         );
     }
 }
