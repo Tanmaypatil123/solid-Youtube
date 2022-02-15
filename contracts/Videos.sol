@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import  "../interface/IComments.sol";
 contract VideoContract {
+    IComments public commentsOnVideo;
     struct Video {
         string ipfsAddress;
         string title;
@@ -45,13 +47,14 @@ contract VideoContract {
     function UploadVideo(
         string memory _ipfsAdd,
         string memory _title,
-        string memory _description
+        string memory _description,
+        address _commentAddress
     ) public {
         require(bytes(_ipfsAdd).length > 0);
         require(bytes(_description).length > 0);
         require(bytes(_title).length > 0);
-
         VideoCount++;
+        commentsOnVideo = IComments(_commentAddress);
         uint256 intial_likes = 0;
         uint256 intial_dislikes = 0;
         videos[VideoCount] = Video(
