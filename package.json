@@ -6,10 +6,22 @@
     "@openzeppelin/contracts": "^4.5.0",
     "chai": "^4.3.6",
     "hardhat-gas-reporter": "^1.0.7",
+    "next": "^12.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "solidity-coverage": "^0.7.19"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "devDependencies": {
     "@openzeppelin/test-environment": "^0.1.9",
-    "@openzeppelin/test-helpers": "^0.5.15"
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
+    "tailwindcss": "^3.0.22"
   }
 }
