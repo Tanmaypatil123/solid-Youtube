@@ -22,12 +22,9 @@ describe("Video contract", function () {
 
   it("should emit Video created event", async function () {
     const cid = "Qmeff4AvGELYTWUZD23s36VrPo6An24wywFxoDskjzVPJc";
-    const Comments = await ethers.getContractFactory("Comments");
-    comments = await Comments.deploy(1);
-    await comments.deployed();
     const transaction = await videos
       .connect(video_owner)
-      .UploadVideo(cid, "test title", "test desc", comments.address);
+      .UploadVideo(cid, "test title", "test desc");
     const res = await transaction.wait();
     const hash = res.events[0].args;
     expect(transaction).to.emit(videos, "VideoCreated");
@@ -93,7 +90,7 @@ describe("Video contract", function () {
   });
 
   it("should comment on video", async function () {
-    const ComTx = await comments.connect(user).CreateComment("great video");
+    const ComTx = await videos.connect(user).CreateComment("great video");
     const ComRes = await ComTx.wait();
     const ComHash = await ComRes.events[0].args;
     expect(ComHash[0]).to.equal(1);
@@ -102,7 +99,7 @@ describe("Video contract", function () {
   });
 
   it("should add comment to mapping", async function () {
-    const [add, content] = await comments.getCommentsDetails(1);
+    const [add, content] = await videos.getCommentsDetails(1);
     expect(add).to.equal(user.address);
     expect(content).to.equal("great video");
   });
